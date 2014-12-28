@@ -44,8 +44,10 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject get(int index) {
-		ReturnObject result;
-		if (index > this.numberList.length()
+		ReturnObject result = new ReturnObjectImpl();
+		if (index > this.numberList.length) {
+
+		}
 	};
 
 	/**
