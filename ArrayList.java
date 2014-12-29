@@ -70,12 +70,10 @@ public class ArrayList implements List {
 	public ReturnObject get(int index) {
 		//First check for any errors
 		ReturnObject result = errorCheck(index);
-		
 		if (result.hasError == false) {
 			//Get the item from the array
 			result.setItem(objList[index]);
 		}
-		
 		return result;
 	};
 
@@ -123,7 +121,7 @@ public class ArrayList implements List {
 		if (this.objList[index] == null) {
 			this.objList[index] = item;
 		} else {
-			redimList(index, item);		
+			reDimList(index, item);		
 		}
 		return result;
 	};
@@ -141,14 +139,14 @@ public class ArrayList implements List {
 	 */
 	public ReturnObject add(Object item) {
 		ReturnObject result = errorCheck(index);
-		redimList(this.objList.length, item);
+		reDimList(this.objList.length, item);
 		return result;	
 	};
 	/**
 	* Sometimes we are going to need to redim an the list array if we are inserting more objects in it
-	* 
+	* @param item the value to insert into the list
 	*/
-	private void redimList(int index, Object item) {
+	private void reDimList(int index, Object item) {
 		Object[] tmpList = new Object[this.objList.length + 1];
 		for(int i = 0; i < tmpList.length; i++) {
 			if (i < index) {
@@ -161,5 +159,18 @@ public class ArrayList implements List {
 		}
 		this.objList = tmpList;
 	}
+	//To remove an item
+	private void reDimList(int index) {
+		Object[] tmpList = new Object[this.objList.length - 1];
+		for(int i = 0; i < tmpList.length; i++) {
+			if (i < index) {
+				tmpList[i] = this.objList[i];
+			} else if (i > index) {
+				tmpList[i-1] = this.objList[i];
+			} 
+		}
+		this.objList = tmpList;
+	}	
+	
 
 }
