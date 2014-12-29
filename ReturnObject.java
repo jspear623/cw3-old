@@ -10,7 +10,6 @@ public interface ReturnObject {
 	 * @return whether there has been an error
 	 */
 	public boolean hasError();
-
 	/**
 	 * Returns the error message. 
 	 * 

@@ -9,22 +9,22 @@ public class ArrayList implements List {
 	 * 
 	 * @return true if the list is empty, false otherwise. 
 	 */
-	public boolean isEmpty(
+	public boolean isEmpty() {
 		for(int i = 0; i < this.objList.length; i++) {
 			if (this.objList != null) {
 				return true;
 			}
 		}
-		//if it get's this far then the list is empty
+		//if it gets this far then the list is empty
 		return false;		
-	);
+	};
 
 	/**
 	 * Returns the number of items currently in the list.
 	 * 
 	 * @return the number of items currently in the list
 	 */
-	public int size(
+	public int size() {
 		int itemCount = 0;
 		for(int i = 0; i < this.objList.length; i++) {
 			if (this.objList != null) {
@@ -32,30 +32,38 @@ public class ArrayList implements List {
 			}
 		}
 		return itemCount;
-	);
+	};
 	/** 
 	*	Checks whether an item is out of bounds of the array
 	*	Saves us writing this out a few times
 	*	@param index The position in the array that we are trying to access
 	*  	@return a ReturnObject with or without errors	
 	*/
-	private ReturnObject errorCheck(int index) {
-		ReturnObject result = new ReturnObjectImpl();
+	private ReturnObjectImpl errorCheck(int index) {
+
+		ReturnObjectImpl result = new ReturnObjectImpl();
 		if ((index > this.objList.length) || (index < 0)) {
 			//It's out of bounds
-			result.setError = true;
-			result.setErrorDetails((ErrorMessage) INDEX_OUT_OF_BOUNDS);
-		} else if (index = null) {
-			//The argument is null - we need to stop that
-			result.setError = true;
-			result.setErrorDetails((ErrorMessage) INVALID_ARGUMENT);
-		} else if (this.objList(index) == null) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		} else if (this.objList[index] == null) {
 			//There is nothing there!
-			result.setError = true;
-			result.setErrorDetails((ErrorMessage) EMPTY_STRUCTURE);
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);
 		}
 		return result;
 	}
+	
+	
+	private ReturnObjectImpl errorCheck(Object item) {
+
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (item == null) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
+		}
+		return result;
+	}	
 	/**
 	 * Returns the elements at the given position. 
 	 * 
@@ -69,8 +77,8 @@ public class ArrayList implements List {
 	 
 	public ReturnObject get(int index) {
 		//First check for any errors
-		ReturnObject result = errorCheck(index);
-		if (result.hasError == false) {
+		ReturnObjectImpl result = errorCheck(index);
+		if (result.hasError() == false) {
 			//Get the item from the array
 			result.setItem(objList[index]);
 		}
@@ -90,10 +98,10 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject remove(int index) {
-		ReturnObject result = errorCheck(index);
-		if (result.hasError == false) {
+		ReturnObjectImpl result = errorCheck(index);
+		if (result.hasError() == false) {
 			result.setItem(objList[index]);
-			objList[index] = null;
+			reDimList(index);
 		}
 		return result;
 	};
@@ -117,7 +125,7 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(int index, Object item) {
-		ReturnObject result = errorCheck(index);
+		ReturnObjectImpl result = errorCheck(index,item);
 		if (this.objList[index] == null) {
 			this.objList[index] = item;
 		} else {
@@ -138,7 +146,7 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(Object item) {
-		ReturnObject result = errorCheck(index);
+		ReturnObjectImpl result = errorCheck(item);
 		reDimList(this.objList.length, item);
 		return result;	
 	};

@@ -1,6 +1,6 @@
 public class ReturnObjectImpl implements ReturnObject {
 	private boolean error;
-	private ErrorMessage errMessage; 
+	private ErrorMessage errorDetails; 
 	private Object item;	
 	
 	/**
@@ -32,18 +32,18 @@ public class ReturnObjectImpl implements ReturnObject {
 	}
 	
 	public ErrorMessage getError() {
-		if (this.hasError == false) {
+		if (this.hasError() == false) {
 			return ErrorMessage.NO_ERROR;
 		} else {
-			return this.errMessage;
+			return this.errorDetails;
 		}
 	}
 	
 	public Object getReturnValue() {
-		if (this.hasError == false) {
+		if (this.hasError() == false) {
 			return this.item;
 		} else {
-			return this.errMessage
+			return this.errorDetails;
 		}
 	}
 
