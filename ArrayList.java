@@ -33,7 +33,13 @@ public class ArrayList implements List {
 		}
 		return itemCount;
 	};
-
+	/**
+	 * Does the error checking on the index. Checks whether it is in the range and whether the item in the place is null (if the request is a get)
+	 * @param index The position in the array that we are trying to access
+	 * @param result A returnObject that is passed in to the method so we can use the same returnObject when passing through serveral checks
+	 * @param get A boolean that defines whether this is request to get an item from the array or set it. If get = true then we are interested if that item is empty.
+	 * @return a returnObject that will contain any errors that occur because of the index
+	 */
 	private ReturnObjectImpl indexCheck(int index, ReturnObjectImpl result, boolean get) {
 		if ((index >= this.objList.length) || (index < 0)) {
 			//It's out of bounds
@@ -48,14 +54,20 @@ public class ArrayList implements List {
 		}
 		return result;
 	}
-	
+	/**
+	 * Does the error checking on the input item. Checks whether it is null
+	 * @param item The item that is about to be put in the array
+	 * @param result A returnObject that is passed in to the method so we can use the same returnObject when passing through serveral checks
+	 * @return a returnObject that will contain any errors that occur because of the item
+	 */	
 	private ReturnObjectImpl objectCheck(Object item, ReturnObjectImpl result) {
 		if (item == null) {
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
 		}
 		return result;
-	}		
+	}
+	
 	/** 
 	*	Checks whether an item is out of bounds of the array
 	*	Saves us writing this out a few times
@@ -63,25 +75,26 @@ public class ArrayList implements List {
 	*	@param index The position in the array that we are trying to access
 	*  	@return a ReturnObject with or without errors	
 	*/	
+	
 	private ReturnObjectImpl errorCheck(int index, boolean get) {
 		ReturnObjectImpl result = new ReturnObjectImpl();
 		result = indexCheck(index,result,get);
 		return result;
 	}
 
-	private ReturnObjectImpl errorCheck(Object item) {
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		result = objectCheck(item,result);
-		return result;
-	}
-	
 	private ReturnObjectImpl errorCheck(int index, Object item, boolean get) {
 		ReturnObjectImpl result = new ReturnObjectImpl();
 		result = indexCheck(index,result,get);
 		result = objectCheck(item,result);
 		return result;
-	}
+	}	
 	
+	private ReturnObjectImpl errorCheck(Object item) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		result = objectCheck(item,result);
+		return result;
+	}
+		
 	/**
 	 * Returns the elements at the given position. 
 	 * 
@@ -171,8 +184,10 @@ public class ArrayList implements List {
 		reDimList(this.objList.length, item);
 		return result;	
 	};
+	
 	/**
 	* Sometimes we are going to need to redim an the list array if we are inserting more objects in it
+	* @param index the position in the array that we are insering the item
 	* @param item the value to insert into the list
 	*/
 	private void reDimList(int index, Object item) {
@@ -188,7 +203,12 @@ public class ArrayList implements List {
 		}
 		this.objList = tmpList;
 	}
-	//To remove an item
+	
+	/**
+	* Sometimes we are going to need to redim an the list array if we are removing an object from it
+	* @override
+	* @param index the position in the array that we are removing
+	*/
 	private void reDimList(int index) {
 	
 		Object[] tmpList = new Object[this.objList.length - 1];
@@ -201,8 +221,11 @@ public class ArrayList implements List {
 			} 
 		}
 		this.objList = tmpList;
-	}	
-	//Only for testing purposes
+	}
+	
+	/**
+	* This is just for testing to help visualise the array
+	*/
 	private void printArr() {
 		for(int i = 0; i < this.objList.length; i++) {
 			System.out.println(i + " : " + this.objList[i]);
