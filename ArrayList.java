@@ -33,37 +33,55 @@ public class ArrayList implements List {
 		}
 		return itemCount;
 	};
-	/** 
-	*	Checks whether an item is out of bounds of the array
-	*	Saves us writing this out a few times
-	*	@param index The position in the array that we are trying to access
-	*  	@return a ReturnObject with or without errors	
-	*/
-	private ReturnObjectImpl errorCheck(int index) {
 
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		if ((index > this.objList.length) || (index < 0)) {
+	private ReturnObjectImpl indexCheck(int index, ReturnObjectImpl result, boolean get) {
+		if ((index >= this.objList.length) || (index < 0)) {
 			//It's out of bounds
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
 		} else if (this.objList[index] == null) {
-			//There is nothing there!
-			result.setError(true);
-			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);
+			if (get == true) {
+				//There is nothing there! Only useful if this is a get rather than a set
+				result.setError(true);
+				result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);
+			}
 		}
 		return result;
 	}
 	
-	
-	private ReturnObjectImpl errorCheck(Object item) {
-
-		ReturnObjectImpl result = new ReturnObjectImpl();
+	private ReturnObjectImpl objectCheck(Object item, ReturnObjectImpl result) {
 		if (item == null) {
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
 		}
 		return result;
-	}	
+	}		
+	/** 
+	*	Checks whether an item is out of bounds of the array
+	*	Saves us writing this out a few times
+	*	Used for gets of data
+	*	@param index The position in the array that we are trying to access
+	*  	@return a ReturnObject with or without errors	
+	*/	
+	private ReturnObjectImpl errorCheck(int index, boolean get) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		result = indexCheck(index,result,get);
+		return result;
+	}
+
+	private ReturnObjectImpl errorCheck(Object item) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		result = objectCheck(item,result);
+		return result;
+	}
+	
+	private ReturnObjectImpl errorCheck(int index, Object item, boolean get) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		result = indexCheck(index,result,get);
+		result = objectCheck(item,result);
+		return result;
+	}
+	
 	/**
 	 * Returns the elements at the given position. 
 	 * 
@@ -77,7 +95,7 @@ public class ArrayList implements List {
 	 
 	public ReturnObject get(int index) {
 		//First check for any errors
-		ReturnObjectImpl result = errorCheck(index);
+		ReturnObjectImpl result = errorCheck(index,true);
 		if (result.hasError() == false) {
 			//Get the item from the array
 			result.setItem(objList[index]);
@@ -98,7 +116,8 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject remove(int index) {
-		ReturnObjectImpl result = errorCheck(index);
+		//this.printArr();
+		ReturnObjectImpl result = errorCheck(index, true);
 		if (result.hasError() == false) {
 			result.setItem(objList[index]);
 			reDimList(index);
@@ -125,11 +144,13 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(int index, Object item) {
-		ReturnObjectImpl result = errorCheck(index,item);
-		if (this.objList[index] == null) {
-			this.objList[index] = item;
-		} else {
-			reDimList(index, item);		
+		ReturnObjectImpl result = errorCheck(index,item, false);
+		if (result.hasError() == false) {
+			if (this.objList[index] == null) {
+				this.objList[index] = item;
+			} else {
+				reDimList(index, item);		
+			}
 		}
 		return result;
 	};
@@ -169,16 +190,24 @@ public class ArrayList implements List {
 	}
 	//To remove an item
 	private void reDimList(int index) {
+	
 		Object[] tmpList = new Object[this.objList.length - 1];
 		for(int i = 0; i < tmpList.length; i++) {
 			if (i < index) {
 				tmpList[i] = this.objList[i];
-			} else if (i > index) {
-				tmpList[i-1] = this.objList[i];
+			} else if (i >= index) {
+
+				tmpList[i] = this.objList[i+1];
 			} 
 		}
 		this.objList = tmpList;
 	}	
+	//Only for testing purposes
+	private void printArr() {
+		for(int i = 0; i < this.objList.length; i++) {
+			System.out.println(i + " : " + this.objList[i]);
+		}	
+	}
 	
 
 }
