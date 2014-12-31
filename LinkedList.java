@@ -43,9 +43,9 @@ public class LinkedList implements List {
 	
 	public boolean isEmpty() {
 		if (this.size() == 0) {
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}
 	};
 
@@ -70,11 +70,11 @@ public class LinkedList implements List {
 	 */
 	public ReturnObject get(int index){
 		ReturnObjectImpl result = new ReturnObjectImpl();
-		if (this.headNode == null) {
+		if (this.isEmpty()) {
 			//You can't get anything. It's empty8
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);				
-		}else if (this.length < index) {
+		}else if ((this.length < index) || (index < 0)) {
 			//It's out of bounds
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);		
@@ -103,6 +103,88 @@ public class LinkedList implements List {
 	 */
 	public ReturnObject remove(int index) {
 		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (this.headNode == null) {
+			//You can't remove anything. It's empty
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);				
+		} else if ((this.length < index) || (index < 0)) {
+			//It's out of bounds
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);		
+		} else {
+			if (index == 0) {
+				//You are removing the headNode
+				result.setItem(this.headNode.getItem());
+				this.headNode = this.headNode.getNextNode();
+			} else {
+				ListNode tempNode = headNode;
+				//Loop until you find the node before the position you want to remove
+				while (tempNode.getIndex() < (index - 1)) {
+					tempNode = tempNode.getNextNode();
+				}
+				result.setItem(tempNode.getNextNode().getItem());
+				tempNode.setNextNode(tempNode.getNextNode().getNextNode());		
+				
+			}
+			//remove last item
+			this.length--;
+			//Now adjust the indexes
+			adjustIndexes(index);					
+		}
+		return result;
+	};
+
+
+	/**
+	* Moves all the indexes of the nodes up or down 1 from the specified index point
+	* @param index The index point which we are adjusting from
+	* @param up Whether you are moving them up or down
+	*/
+	private void adjustIndexes(int index) {
+		ListNode tempNode = headNode;
+		//Loop until you find the node before the position you want to insert it
+		int i = 0;
+		while (tempNode != null) {
+			if (i >= index) {
+				tempNode.setIndex(i);
+			}
+			tempNode = tempNode.getNextNode();
+			i++;
+		}
+	}
+	/**
+	 * Adds an element at the end of the list.
+	 * 
+	 * If a null object is provided to insert in the list, the
+	 * request must be ignored and an appropriate error must be
+	 * returned.
+	 * 
+	 * @param item the value to insert into the list
+	 * @return an ReturnObject, empty if the operation is successful
+	 *         the item added or containing an appropriate error message
+	 */
+	public ReturnObject add(Object item) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (item == null) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
+		} else {
+			int index = 0;
+			if (this.headNode == null) {
+				this.headNode = new ListNode(index, item);
+			} else {
+				ListNode tempNode = headNode;
+				do {
+					tempNode = tempNode.getNextNode();
+					index++;
+				} while (tempNode.getNextNode() != null);
+				ListNode newNode = new ListNode(index, item);
+				tempNode.setNextNode(newNode);
+				
+			}
+			//Add 1 to the length field					
+			this.length++;
+		}
 		return result;
 	};
 
@@ -154,65 +236,17 @@ public class LinkedList implements List {
 				}
 				//Now adjust the indexes
 				adjustIndexes(index);
-				//Add 1 to the length field
-				this.length++;
+
+				
 			}
+			//Add 1 to the length field			
+			this.length++;
 		}
-		printList();		
+		//printList();		
 		return result;
-	};
-	/**
-	* Moves all the indexes of the nodes up or down 1 from the specified index point
-	* @param index The index point which we are adjusting from
-	* @param up Whether you are moving them up or down
-	*/
-	private void adjustIndexes(int index) {
-		ListNode tempNode = headNode;
-		//Loop until you find the node before the position you want to insert it
-		int i = 0;
-		while (tempNode != null) {
-			if (i >= index) {
-				tempNode.setIndex(i);
-			}
-			tempNode = tempNode.getNextNode();
-			i++;
-		}
-	}
-	/**
-	 * Adds an element at the end of the list.
-	 * 
-	 * If a null object is provided to insert in the list, the
-	 * request must be ignored and an appropriate error must be
-	 * returned.
-	 * 
-	 * @param item the value to insert into the list
-	 * @return an ReturnObject, empty if the operation is successful
-	 *         the item added or containing an appropriate error message
-	 */
-	public ReturnObject add(Object item) {
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		if (item == null) {
-			result.setError(true);
-			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
-		} else {
-			int index = 0;
-			if (this.headNode == null) {
-				this.headNode = new ListNode(index, item);
-			} else {
-				ListNode tempNode = headNode;
-				do {
-					tempNode = tempNode.getNextNode();
-					index++;
-				} while (tempNode.getNextNode() != null);
-				ListNode newNode = new ListNode(index, item);
-				tempNode.setNextNode(newNode);
-				this.length++;
-			}
-		}
-		return result;
-	};
+	};	
 	
-    public void printChain() {
+    public void printList() {
 		//For testing purposes only
         ListNode current = this.headNode;
         while (current != null) {
