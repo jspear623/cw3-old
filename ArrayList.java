@@ -1,5 +1,5 @@
 public class ArrayList implements List {
-	private Object[] objList;
+	protected Object[] objList;
 	public ArrayList(int length) {
 		this.objList = new Object[length];
 	}
@@ -190,7 +190,7 @@ public class ArrayList implements List {
 	* @param index the position in the array that we are insering the item
 	* @param item the value to insert into the list
 	*/
-	private void reDimList(int index, Object item) {
+	protected void reDimList(int index, Object item) {
 		Object[] tmpList = new Object[this.objList.length + 1];
 		for(int i = 0; i < tmpList.length; i++) {
 			if (i < index) {
@@ -209,7 +209,7 @@ public class ArrayList implements List {
 	* @override
 	* @param index the position in the array that we are removing
 	*/
-	private void reDimList(int index) {
+	protected void reDimList(int index) {
 	
 		Object[] tmpList = new Object[this.objList.length - 1];
 		for(int i = 0; i < tmpList.length; i++) {
@@ -226,7 +226,7 @@ public class ArrayList implements List {
 	/**
 	* This is just for testing to help visualise the array
 	*/
-	private void printArr() {
+	protected void printArr() {
 		for(int i = 0; i < this.objList.length; i++) {
 			System.out.println(i + " : " + this.objList[i]);
 		}	
