@@ -14,6 +14,10 @@ public class TestLinkedList {
 	}
 	public void launch() {
 		System.out.println("I have created a new LinkedList which is empty.\n");
+		runTests();
+	}
+	
+	public void runTests(){
 		testItem("I have inserted one String - 'John' using the normal add (no index). I am now going to print the result of this operation. It should be null.",this.testList.add("John"));	
 		testItem("Now getting the item in index 0. It should print John.",testList.get(0));	
 		testItem("Adding the number 5 at place 0. It should return null. John should be moved to index 1.",testList.add(0,5));	
@@ -33,12 +37,9 @@ public class TestLinkedList {
 		testItem("...and John...",testList.remove(0));		
 		testItem("...and finally an Empty Structure error.",testList.remove(0));
 		testItem("Adding string 'Test complete' at index 0. Should return null.",testList.add(0,"Test complete!"));		
-		testItem("Getting this string back. Should be 'Test complete!'.",testList.get(0));		
-		
-		
-		
-
+		testItem("Getting this string back. Should be 'Test complete!'.",testList.get(0));			
 	}
+	
 	public void testItem(String outcome, ReturnObject result) {
 		System.out.println(outcome);
  		System.out.println(result.getReturnValue());

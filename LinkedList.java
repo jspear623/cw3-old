@@ -1,11 +1,11 @@
 public class LinkedList implements List {
 	int length;
-	ListNode headNode;
+	protected ListNode headNode;
 	public LinkedList() {
 		this.length = 0;
 		this.headNode = null;
 	}
-	private class ListNode {
+	protected class ListNode {
 		int index;
 		Object item;
 		ListNode nextNode;
