@@ -41,7 +41,9 @@ public class ArrayList implements List {
 	 * @return a returnObject that will contain any errors that occur because of the index
 	 */
 	private ReturnObjectImpl indexCheck(int index, ReturnObjectImpl result, boolean get) {
-		if ((index >= this.objList.length) || (index < 0)) {
+		if ((index == 0) && (get == false)) {
+			//If they want to set index 0 to something then let them!
+		} else if ((index >= this.objList.length) || (index < 0)) {
 			//It's out of bounds
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
