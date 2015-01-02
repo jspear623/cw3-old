@@ -1,5 +1,5 @@
 public class LinkedList implements List {
-	int length;
+	protected int length;
 	protected ListNode headNode;
 	public LinkedList() {
 		this.length = 0;
@@ -165,6 +165,7 @@ public class LinkedList implements List {
 	 */
 	public ReturnObject add(Object item) {
 		ReturnObjectImpl result = new ReturnObjectImpl();
+
 		if (item == null) {
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
@@ -174,10 +175,15 @@ public class LinkedList implements List {
 				this.headNode = new ListNode(index, item);
 			} else {
 				ListNode tempNode = headNode;
-				do {
-					tempNode = tempNode.getNextNode();
-					index++;
-				} while (tempNode.getNextNode() != null);
+				index = 1;				
+				if (headNode.getNextNode() == null) {
+					//If the head node is the only node in the structure
+				} else {			
+					do {
+						tempNode = tempNode.getNextNode();
+						index++;
+					} while (tempNode.getNextNode() != null);			
+				}
 				ListNode newNode = new ListNode(index, item);
 				tempNode.setNextNode(newNode);
 				
@@ -185,6 +191,7 @@ public class LinkedList implements List {
 			//Add 1 to the length field					
 			this.length++;
 		}
+		printList();
 		return result;
 	};
 
@@ -242,7 +249,7 @@ public class LinkedList implements List {
 			//Add 1 to the length field			
 			this.length++;
 		}
-		//printList();		
+		printList();		
 		return result;
 	};	
 	

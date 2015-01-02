@@ -18,7 +18,7 @@ public class TestFunctionalLinkedList extends TestLinkedList {
 		super.runTests();
 		//All standard functionality checked. Now test extended functionality
 		System.out.print("**************************\n STANDARD TESTING COMPLETE. EXTENDED TESTING STARTING \n**************************\n");
-		testItem("Adding the number 36.",this.testList.add(36));	
+		testItem("Adding the number 36.",this.testList.add(36));
 		testItem("Adding the number 37.",this.testList.add(37));
 		testItem("Adding the string 'thirty eight'.",this.testList.add("thirty eight"));	
 		testItem("Adding at index 1 the double 36.34.",this.testList.add(1,(double) 36.34));	
@@ -34,12 +34,6 @@ public class TestFunctionalLinkedList extends TestLinkedList {
 		testItem("....Then 'thirty eight'",restList.remove(0));
 		testItem("It should now be empty.",restList.remove(0));
 		testItem("Let's try to get the head. Should return an empty error.",restList.head());
-		
-		
-		
-			
-		
-	//	testItem("I am now going to return the head node using the head function. This should be John.",this.testList.head());	
 
 	}
 
