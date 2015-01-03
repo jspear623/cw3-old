@@ -33,70 +33,7 @@ public class ArrayList implements List {
 		}
 		return itemCount;
 	};
-	/**
-	 * Does the error checking on the index. Checks whether it is in the range and whether the item in the place is null (if the request is a get)
-	 * @param index The position in the array that we are trying to access
-	 * @param result A returnObject that is passed in to the method so we can use the same returnObject when passing through serveral checks
-	 * @param get A boolean that defines whether this is request to get an item from the array or set it. If get = true then we are interested if that item is empty.
-	 * @return a returnObject that will contain any errors that occur because of the index
-	 */
-	private ReturnObjectImpl indexCheck(int index, ReturnObjectImpl result, boolean get) {
-		if ((index == 0) && (get == false)) {
-			//If they want to set index 0 to something then let them!
-		} else if ((index >= this.objList.length) || (index < 0)) {
-			//It's out of bounds
-			result.setError(true);
-			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
-		} else if (this.objList[index] == null) {
-			if (get == true) {
-				//There is nothing there! Only useful if this is a get rather than a set
-				result.setError(true);
-				result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);
-			}
-		}
-		return result;
-	}
-	/**
-	 * Does the error checking on the input item. Checks whether it is null
-	 * @param item The item that is about to be put in the array
-	 * @param result A returnObject that is passed in to the method so we can use the same returnObject when passing through serveral checks
-	 * @return a returnObject that will contain any errors that occur because of the item
-	 */	
-	private ReturnObjectImpl objectCheck(Object item, ReturnObjectImpl result) {
-		if (item == null) {
-			result.setError(true);
-			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
-		}
-		return result;
-	}
-	
-	/** 
-	*	Checks whether an item is out of bounds of the array
-	*	Saves us writing this out a few times
-	*	Used for gets of data
-	*	@param index The position in the array that we are trying to access
-	*  	@return a ReturnObject with or without errors	
-	*/	
-	
-	private ReturnObjectImpl errorCheck(int index, boolean get) {
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		result = indexCheck(index,result,get);
-		return result;
-	}
 
-	private ReturnObjectImpl errorCheck(int index, Object item, boolean get) {
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		result = indexCheck(index,result,get);
-		result = objectCheck(item,result);
-		return result;
-	}	
-	
-	private ReturnObjectImpl errorCheck(Object item) {
-		ReturnObjectImpl result = new ReturnObjectImpl();
-		result = objectCheck(item,result);
-		return result;
-	}
-		
 	/**
 	 * Returns the elements at the given position. 
 	 * 
@@ -110,9 +47,16 @@ public class ArrayList implements List {
 	 
 	public ReturnObject get(int index) {
 		//First check for any errors
-		ReturnObjectImpl result = errorCheck(index,true);
-		if (result.hasError() == false) {
-			//Get the item from the array
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (this.objList.length == 0) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);			
+		} else if ((index >= this.objList.length) || (index < 0)) {
+			//It's out of bounds
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		} else {
+			// Get the item from the array. Even if it is null.
 			result.setItem(objList[index]);
 		}
 		return result;
@@ -131,12 +75,20 @@ public class ArrayList implements List {
 	 *         encapsulated in a ReturnObject
 	 */
 	public ReturnObject remove(int index) {
-		//this.printArr();
-		ReturnObjectImpl result = errorCheck(index, true);
-		if (result.hasError() == false) {
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (this.objList.length == 0) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.EMPTY_STRUCTURE);			
+		} else if ((index >= this.objList.length) || (index < 0)) {
+			//It's out of bounds
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);
+		} else {
 			result.setItem(objList[index]);
 			reDimList(index);
 		}
+		//printArr();
+		//System.out.println("Length:" + this.objList.length);
 		return result;
 	};
 
@@ -159,14 +111,24 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(int index, Object item) {
-		ReturnObjectImpl result = errorCheck(index,item, false);
-		if (result.hasError() == false) {
+		//System.out.println("Length:" + this.objList.length);
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (item == null) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
+		} else if (((index != 0) && (index >= this.objList.length)) || (index < 0)) {
+			//if it is out of bounds and isn't 0
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);						
+		} else {
+			//If the item is null then there is no need to change the list size. We can just replace the null.
 			if (this.objList[index] == null) {
 				this.objList[index] = item;
 			} else {
 				reDimList(index, item);		
-			}
+			}		
 		}
+		//printArr();
 		return result;
 	};
 
@@ -182,8 +144,13 @@ public class ArrayList implements List {
 	 *         the item added or containing an appropriate error message
 	 */
 	public ReturnObject add(Object item) {
-		ReturnObjectImpl result = errorCheck(item);
-		reDimList(this.objList.length, item);
+		ReturnObjectImpl result = new ReturnObjectImpl();
+		if (item == null) {
+			result.setError(true);
+			result.setErrorDetails(ErrorMessage.INVALID_ARGUMENT);
+		} else {
+			reDimList(this.objList.length, item);
+		}
 		return result;	
 	};
 	

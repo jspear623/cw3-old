@@ -22,7 +22,7 @@ public class TestArrayList {
 	public void runTests(){
 		testItem("I have inserted one String - 'John' in the index 0. I am now going to print the result of this operation. It should be null.",this.testList.add(0,"John"));	
 		testItem("Now getting the item in index 0. It should print John.",testList.get(0));	
-		testItem("Now getting the item in index 1. Nothing there. It should show an empty structure error.",testList.get(1));	
+		testItem("Now getting the item in index 1. Nothing there but the space does exist. It should show null.",testList.get(1));	
 		testItem("Adding the number 5 at place 0. It should return null. John should be moved to index 1.",testList.add(0,5));	
 		testItem("Now getting item in 0. It should print 5.",testList.get(0));	
 		testItem("Now getting item in 1. It should print John.",testList.get(1));
@@ -39,7 +39,7 @@ public class TestArrayList {
 		testItem("...then John...",testList.remove(0));			
 		testItem("...then Testing...",testList.remove(0));
 		testItem("...and 31.24...",testList.remove(0));
-		testItem("...and finally an OOB error.",testList.remove(0));	
+		testItem("...and finally an Empty Structure error.",testList.remove(0));	
 	}
 	
 	public void testItem(String outcome, ReturnObject result) {
