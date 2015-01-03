@@ -120,6 +120,9 @@ public class ArrayList implements List {
 			//if it is out of bounds and isn't 0
 			result.setError(true);
 			result.setErrorDetails(ErrorMessage.INDEX_OUT_OF_BOUNDS);						
+		} else if ((index == 0) && (index >= this.objList.length)) {
+			//If the list is empty but you are trying to insert into the first slot
+			reDimList(index, item);	
 		} else {
 			//If the item is null then there is no need to change the list size. We can just replace the null.
 			if (this.objList[index] == null) {

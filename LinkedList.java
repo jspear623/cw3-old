@@ -191,7 +191,7 @@ public class LinkedList implements List {
 			//Add 1 to the length field					
 			this.length++;
 		}
-		printList();
+		//printList();
 		return result;
 	};
 
@@ -249,7 +249,7 @@ public class LinkedList implements List {
 			//Add 1 to the length field			
 			this.length++;
 		}
-		printList();		
+		//printList();		
 		return result;
 	};	
 	
